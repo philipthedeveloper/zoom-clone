@@ -1,8 +1,12 @@
 const socket = io("/");
 var peer = new Peer({
-  port: "10000",
-  path: "/peerjs",
-  host: "/",
+  // port: "10000",
+  // path: "/peerjs",
+  // host: "/",
+  port: 10000, // Set the port to 10000
+  path: "/peerjs", // Set the path to /peerjs
+  host: "zoom-clone-9uzm.onrender.com", // Set the host to your production server URL
+  secure: true, // Use secure WebSocket connection
 });
 let videoContainer = document.querySelector(".video-container");
 let myVideoEl = document.createElement("video");

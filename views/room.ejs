@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Zoom Clone</title>
+    <script
+      src="https://kit.fontawesome.com/033f63a742.js"
+      crossorigin="anonymous"
+    ></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+      rel="stylesheet"
+    />
+    <script src="/socket.io/socket.io.js" defer></script>
+    <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
+    <script>
+      const ROOM_ID = "<%= roomId %>";
+    </script>
+    <script defer src="./app.js"></script>
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body class="roboto-regular">
+    <div class="main">
+      <div class="main__left">
+        <div class="main__videos">
+          <div class="video-container"></div>
+        </div>
+        <div class="main__controls">
+          <div class="main__controls__block">
+            <div class="main__controls__button mute">
+              <i class="fa-solid fa-microphone"></i>
+              <span class="roboto-regular">Mute</span>
+            </div>
+            <div class="main__controls__button stop-video">
+              <i class="fa-solid fa-video"></i>
+              <span class="roboto-regular">Stop Video</span>
+            </div>
+          </div>
+          <div class="main__controls__block">
+            <div class="main__controls__button security">
+              <i class="fa-solid fa-shield-halved"></i>
+              <span class="roboto-regular">Security</span>
+            </div>
+            <div class="main__controls__button participants">
+              <i class="fa-solid fa-user-group"></i>
+              <span class="roboto-regular">Participants</span>
+            </div>
+            <div class="main__controls__button comment">
+              <i class="fa-solid fa-comment"></i>
+              <span class="roboto-regular">Chat</span>
+            </div>
+          </div>
+          <div class="main__control__block">
+            <div class="main__controls__button leave-meeting">
+              <span class="roboto-regular leave_meeting">Leave Meeting</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="main__right">
+        <div class="main__header">
+          <h6>Chat</h6>
+        </div>
+        <div class="main__chat__window">
+          <ul class="messages"></ul>
+        </div>
+        <div class="main__message__container">
+          <input
+            type="text"
+            id="chat-message"
+            placeholder="Type message here..."
+          />
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

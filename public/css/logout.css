@@ -1,0 +1,41 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: "Arial Narrow", sans-serif;
+}
+
+body {
+  display: flex;
+  height: 100dvh;
+  width: 100dvw;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+h1.logout {
+  color: orangered;
+}
+
+h1,
+a {
+  text-align: center;
+}
+
+a {
+  display: inline-block;
+  margin-top: 1rem;
+  text-decoration: none;
+  padding: 0.4rem 0.8rem;
+  background-color: orangered;
+  color: white;
+  border-radius: 0.4rem;
+  font-size: 0.85rem;
+  transition: 0.4s ease;
+}
+
+a:hover {
+  background-color: red;
+}

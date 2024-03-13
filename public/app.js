@@ -1,9 +1,8 @@
 const socket = io("/");
 var peer = new Peer({
-  // port: "10000",
+  // port: "3000",
   // path: "/peerjs",
   // host: "/",
-  // port: 10000, // Set the port to 10000
   path: "/peerjs", // Set the path to /peerjs
   host: "zoom-clone-9uzm.onrender.com", // Set the host to your production server URL
   secure: true, // Use secure WebSocket connection
@@ -16,11 +15,19 @@ const muteBtn = document.querySelector(".main__controls__button.mute");
 const stopVideoBtn = document.querySelector(
   ".main__controls__button.stop-video"
 );
+const leaveRoomBtn = document.querySelector(
+  ".main__controls__button.leave-meeting"
+);
 
 let myStream;
 
 peer.on("open", (userId) => {
   socket.emit("join-room", ROOM_ID, userId);
+});
+
+peer.on("close", (userId) => {
+  socket.emit("leave-room", ROOM_ID, userId);
+  location.pathname = `/logout/${ROOM_ID}`;
 });
 
 // myVideoEl.muted = true;
@@ -31,11 +38,14 @@ navigator.mediaDevices
     addVideoStream(myVideoEl, stream);
 
     peer.on("call", function (call) {
-      console.log("Answering a call");
       call.answer(stream); // Answer the call with an A/V stream.
       const video = document.createElement("video");
       call.on("stream", function (remoteStream) {
-        addVideoStream(video, remoteStream);
+        addVideoStream(video, remoteStream, call.peer);
+      });
+
+      call.on("close", () => {
+        removeVideoStream(call.peer);
       });
     });
 
@@ -45,18 +55,27 @@ navigator.mediaDevices
   });
 
 const connectToNewUser = (userId, stream) => {
-  console.log("Calling with stream");
   const call = peer.call(userId, stream);
   const video = document.createElement("video");
   call.on("stream", (userVideoStream) => {
-    console.log("Calling answered with stream");
-    addVideoStream(video, userVideoStream);
+    addVideoStream(video, userVideoStream, userId);
+  });
+
+  call.on("close", () => {
+    removeVideoStream(userId);
   });
 };
 
-const addVideoStream = (videoEl, stream) => {
-  console.log("Called");
+const removeVideoStream = (userId) => {
+  const match = document.querySelector(`#video-stream-${userId}`);
+  if (match) {
+    match.remove();
+  }
+};
+
+const addVideoStream = (videoEl, stream, userId) => {
   videoEl.srcObject = stream;
+  videoEl.id = userId ? `video-stream-${userId}` : Math.random().toString();
   videoEl.addEventListener("loadedmetadata", () => {
     videoEl.play();
   });
@@ -82,6 +101,10 @@ socket.on("newMessage", (message) => {
   newMessageItem.innerHTML += `<br />${message}`;
   chatMessagesList.appendChild(newMessageItem);
   scrollToBottom();
+});
+
+socket.on("user-exit", (userId) => {
+  removeVideoStream(userId);
 });
 
 const scrollToBottom = () => {
@@ -143,5 +166,10 @@ const togglePlayStreamVideo = () => {
   }
 };
 
+const handleLeaveRoom = () => {
+  peer.destroy();
+};
+
 muteBtn.addEventListener("click", toggleStreamMute);
 stopVideoBtn.addEventListener("click", togglePlayStreamVideo);
+leaveRoomBtn.addEventListener("click", handleLeaveRoom);
